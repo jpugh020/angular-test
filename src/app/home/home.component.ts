@@ -10,14 +10,20 @@ import { HousingService } from '../housing.service';
   styleUrl: './home.component.less'
 })
 export class HomeComponent {
-
-  readonly baseUrl = 'https://angular.dev/assets/images/tutorials/common';
-
-  housingLocationList:HousingLocation[] =  [];
-
+  housingLocationList: HousingLocation[] = [];
   housingService: HousingService = inject(HousingService);
+  filteredLocationList: HousingLocation[] = [];
   constructor() {
-    this.housingLocationList = this.housingService.housingLocationList;
-  };
-
+    this.housingLocationList = this.housingService.getAllHousingLocations();
+    this.filteredLocationList = this.housingLocationList;
+  }
+  filterResults(text: string) {
+    if (!text) {
+      this.filteredLocationList = this.housingLocationList;
+      return;
+    }
+    this.filteredLocationList = this.housingLocationList.filter((housingLocation) =>
+      housingLocation?.city.toLowerCase().includes(text.toLowerCase()),
+    );
+  }
 }
